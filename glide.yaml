@@ -1,0 +1,9 @@
+
+package: github.com/bakins/alertmanager-config-controller
+import:
+- package: github.com/pkg/errors
+  version: v0.8.0
+- package: github.com/spf13/cobra
+- package: github.com/spf13/pflag
+- package: github.com/davecgh/go-spew/spew
+- package: gopkg.in/yaml.v2

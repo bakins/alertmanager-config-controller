@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager-default-route
+  labels:
+    type: alertmanager
+  annotations:
+    alertmanager-type: Route
+    alertmanager-default-route: "true"
+data:
+  spec: |-
+    receiver: team-X-mails

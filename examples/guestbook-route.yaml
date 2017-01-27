@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager-guestbook-route
+  labels:
+    type: alertmanager
+  annotations:
+    alertmanager-type: Route
+    alertmanager-default-route: "false"
+data:
+  spec: |-
+    receiver: guestbook-devs
+    group_wait: 30s
+    group_interval: 60s
+    repeat_interval: 300s
+    group_by:
+      - app
+      - kubernetes_namespace
+    match:
+      alertGroup: guestbook-devs

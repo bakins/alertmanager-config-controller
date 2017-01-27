@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager-receiver-webhook
+  labels:
+    type: alertmanager
+  annotations:
+    alertmanager-type: Receiver
+data:
+  spec: |-
+    name: guestbook-devs
+    webhook_configs:
+     - url: http://guestbook-devs-notify.default/notify
+       send_resolved: true

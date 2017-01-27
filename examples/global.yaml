@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: global-alertmanager-config
+  labels:
+    type: alertmanager
+  annotations:
+    alertmanager-type: Global
+data:
+  spec: |-
+    resolve_timeout: 60s
+    smtp_smarthost: 'localhost:25'
+    smtp_from: 'alertmanager@example.org'
