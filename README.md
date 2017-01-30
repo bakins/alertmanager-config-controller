@@ -8,6 +8,12 @@ the data from other ConfigMaps and generate an Alertmanager config.
 
 Heavily influenced by [konfd](https://github.com/kelseyhightower/konfd)
 
+Status
+======
+
+This was written as part of a simple internal proof-of-concept.  It is not well tested.
+The documentation probably lags the implementation and is probably full of typos and grammatical errors.
+
 Usage
 =====
 
