@@ -87,6 +87,75 @@ The controller will parse the `spec` to ensure it is a valid global configuratio
 
 InhibitRule generates a single [inhibit_rule](https://prometheus.io/docs/alerting/configuration/#inhibit-rule-<inhibit_rule>). All the rules are added to a list and this generates the `inhibit_rules` section of the Alertmanager config.
 
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-inhibit-rule
+  namespace: kube-system
+  labels:
+    type: alertmanager
+  annotations:
+    alertmanager-type: InhibitRule
+data:
+  spec: |-
+    target_match:
+      foo: bar
+```
+
+### Receiver
+
+Receiver generates a single [receiver](https://prometheus.io/docs/alerting/configuration/#receiver-<receiver>). All the receivers are added to a list and set as the `receivers` section.  See the Alertmanager documents for the format
+of each receiver type.
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager-default-webhook
+  namespace: kube-system
+  labels:
+    type: alertmanager
+    kubernetes.io/cluster-service: "true"
+  annotations:
+    alertmanager-type: Receiver
+data:
+  spec: |-
+    name: mywebhook
+
+    webhook_configs:
+     - url: http://alertmanager-webhook/alerts
+       send_resolved: true
+```
+
+### Template
+
+Template expects a single string that is a path for loading templates.   Templates are not handled
+by the controller currently.  A second ConfigMap - possible generated using the [configmap-aggregator](https://github.com/bakins/configmap-aggregator) - could be used to store
+templates.  Only the path, as seen by the Alertmanager process, needs to be set here.
+
+### Route
+
+Route generates a single [route](https://prometheus.io/docs/alerting/configuration/#route-<route>).
+one - and only one - route should be marked as the default route by setting the `alertmanager-default-route: "true"` annotation. Specifying zero or more than one will cause the controller to error.
+The other routes are added as the list of `routes` on this route. Any nested routes are ignored.
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager-default-route
+  namespace: kube-system
+  labels:
+    type: alertmanager
+    kubernetes.io/cluster-service: "true"
+  annotations:
+    alertmanager-type: Route
+    alertmanager-default-route: "true"
+data:
+  spec: |-
+    receiver: team-X-mails
+```
 
 
 TODO
