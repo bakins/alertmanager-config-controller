@@ -79,7 +79,7 @@ data:
     smtp_from: 'alertmanager@example.org'
 ```
 
-In this example, we expect the controller to be ran with the selector argument set like `--sector=type=alertmanager`.
+In this example, we expect the controller to be ran with the selector argument set like `--selector=type=alertmanager`.
 
 The controller will parse the `spec` to ensure it is a valid global configuration.
 
