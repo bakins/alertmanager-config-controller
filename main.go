@@ -163,11 +163,11 @@ func (c *controller) process() error {
 	return c.upsertConfigMap(cm)
 }
 
-var routes []*Route
-var defaultRoute *Route
-
 func (c *controller) createConfigMap() (*ConfigMap, error) {
 	cfg := Config{}
+
+	var routes []*Route
+	var defaultRoute *Route
 
 	for _, n := range c.namespaces {
 		list, err := c.client.getConfigMaps(n, selector)
