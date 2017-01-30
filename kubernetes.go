@@ -195,5 +195,4 @@ func (k *k8sClient) waitForKubernetes() error {
 			}
 		}
 	}
-
 }

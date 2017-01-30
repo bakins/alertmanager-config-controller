@@ -3,7 +3,6 @@ package main
 //import "gopkg.in/yaml.v2"
 import (
 	"encoding/hex"
-	"fmt"
 	"hash/fnv"
 	"log"
 	"os"
@@ -264,7 +263,6 @@ func (c *controller) createConfigMap() (*ConfigMap, error) {
 	}
 	cm.Data[configFileKey] = string(data)
 
-	fmt.Println(cm.Data[configFileKey])
 	return cm, nil
 }
 
