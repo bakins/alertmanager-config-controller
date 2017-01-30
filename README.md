@@ -14,6 +14,8 @@ Status
 This was written as part of a simple internal proof-of-concept.  It is not well tested.
 The documentation probably lags the implementation and is probably full of typos and grammatical errors.
 
+Docker images availible at https://quay.io/repository/bakins/alertmanager-config-controller?tab=tags
+
 Usage
 =====
 
