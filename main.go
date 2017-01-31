@@ -266,10 +266,41 @@ func (c *controller) createConfigMap() (*ConfigMap, error) {
 	return cm, nil
 }
 
+func (c *controller) postEvent(reason string, cm *ConfigMap) error {
+
+	e := newEvent(cm.Metadata.Namespace, cm.Metadata.Name+"-")
+
+	msg := reason + " configmap"
+	now := time.Now()
+
+	e.Count = 1
+	e.Message = msg
+	e.Reason = msg
+	e.LastTimestamp = now
+	e.FirstTimestamp = now
+	e.Source.Component = "alertmanager-config-controller"
+	e.Type = "Normal"
+	// how would we get host and do we even care?
+
+	e.InvolvedObject = &ObjectReference{
+		Kind:       cm.Kind,
+		APIVersion: cm.ApiVersion,
+		Name:       cm.Metadata.Name,
+		Namespace:  cm.Metadata.Namespace,
+		//ResourceVersion: cm.Metadata.ResourceVersion,
+		UID: cm.Metadata.UID,
+	}
+	return c.client.postEvent(e)
+}
+
 func (c *controller) upsertConfigMap(cm *ConfigMap) error {
 	existing, err := c.client.getConfigMap(c.targetNamespace, c.targetName)
 	if err == ErrNotExist {
-		return c.client.createConfigMap(cm)
+		n, err := c.client.createConfigMap(cm)
+		if err != nil {
+			return err
+		}
+		return c.postEvent("creating", n)
 	}
 	if err != nil {
 		return errors.Wrapf(err, "failed to get config map %s/%s", c.targetNamespace, c.targetName)
@@ -290,5 +321,9 @@ func (c *controller) upsertConfigMap(cm *ConfigMap) error {
 	if compareConfigMaps(existing, cm) {
 		return nil
 	}
-	return c.client.updateConfigMap(cm)
+	n, err := c.client.updateConfigMap(cm)
+	if err != nil {
+		return err
+	}
+	return c.postEvent("updating", n)
 }
